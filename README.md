@@ -1,0 +1,2 @@
+# EventsApi
+Event management api
