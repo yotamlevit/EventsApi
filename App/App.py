@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from Routes import initialize_routers
+from .Routers import initialize_routers
 
 
 def app() -> FastAPI:
