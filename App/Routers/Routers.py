@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from Events import events_api
-from Users import users_api
+from .Events import events_api
+from .Users import users_api
 
 
 def initialize_routers(app: FastAPI) -> None:

@@ -7,7 +7,7 @@ users_api = APIRouter(
 )
 
 
-@users_api.get()
+@users_api.get("")
 def get_users():
     pass
 
