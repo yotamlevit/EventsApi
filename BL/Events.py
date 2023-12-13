@@ -2,10 +2,11 @@ from datetime import datetime
 import pytz
 import sqlite3
 from .DTO import EventDTO
+from DL import EventRepo
 
 class EventManager:
-    def __init__(self, event_db):
-        self.event_db = event_db
+    def __init__(self):
+        self.events_repo = EventRepo()
 
     def create_event(self, event: EventDTO):
         try:
@@ -13,7 +14,7 @@ class EventManager:
             # Example: Check if date is in the future before scheduling
             insertion_time = pytz.utc.localize(datetime.now())
             if event.date > insertion_time:
-                self.event_db.add_event(*list(event.__dict__.values()), creation_time=insertion_time)
+                self.events_repo.add_event(event, insertion_time=insertion_time)
                 return True
             else:
                 return False
@@ -26,25 +27,18 @@ class EventManager:
             print(f"Unexpected error scheduling event: {e}")
             return False
 
-    def get_event_by_id(self, event_id):
+    def delete_event_by_id(self, event_id: str):
+        # Delegate the deletion operation to the EventDB instance
         try:
-            cursor = self.connection.cursor()
-            cursor.execute('SELECT * FROM events WHERE id = ?', (event_id,))
-            return cursor.fetchone()
-        except sqlite3.Error as e:
-            print(f"Error retrieving event: {e}")
-
-    def delete_event(self, event_id):
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute('DELETE FROM events WHERE id = ?', (event_id,))
-            self.connection.commit()
-        except sqlite3.Error as e:
+            self.events_repo.delete_event(event_id)
+            return True  # Return True if deletion is successful
+        except Exception as e:
             print(f"Error deleting event: {e}")
+            return False  # Return False if an error occurs during deletion
 
     def get_event_details(self, event_id):
         try:
-            event = self.event_db.get_event_by_id(event_id)
+            event = self.events_repo.get_event_by_id(event_id)
             if event:
                 return event
             else:
