@@ -10,9 +10,31 @@ class EventRepo:
         self.sql_executor = SqlExecutor()
         self.table = 'events'
         self.fields = list(EventDTO.model_fields.keys())
+        #self.fields.insert(0, 'id')
         self.fields.append("insertion_time")
 
-    def add_event(self, event: EventDTO, insertion_time: datetime):
+    def get_events(self):
+        return self.sql_executor.select(self.table)
+
+    def get_event_by_id(self, event_id):
+        try:
+            return self.sql_executor.select(self.table, condition=f'id={event_id}')
+        except sqlite3.Error as e:
+            print(f"Error retrieving event: {e}")
+
+    def get_event_by_location(self, event_location):
+        try:
+            return self.sql_executor.select(self.table, condition=f'location="{event_location}"')
+        except sqlite3.Error as e:
+            print(f"Error retrieving event: {e}")
+
+    def get_event_by_sort_key(self, sort_key):
+        try:
+            return self.sql_executor.select(self.table, order_by=sort_key)
+        except sqlite3.Error as e:
+            print(f"Error retrieving event: {e}")
+
+    def create_event(self, event: EventDTO, insertion_time: datetime):
         try:
             event_values = list(event.__dict__.values())
             event_values.append(insertion_time)
@@ -21,17 +43,30 @@ class EventRepo:
         except sqlite3.Error as e:
             print(f"Error adding event: {e}")
 
-    def get_event_by_id(self, event_id):
+    """
+    def update_event(self, event_id: int, event: EventDTO):
         try:
-            self.cursor.execute('SELECT * FROM events WHERE id = ?', (event_id,))
-            return self.cursor.fetchone()
+            event_values = [getattr(event, field) for field in self.fields if field != 'id']
+            event_values.append(datetime.now())  # Adding current time for modification
+            condition = f'id={event_id}'  # Assuming 'id' is the primary key
+
+            self.sql_executor.update(self.table, event_values, condition)
         except sqlite3.Error as e:
-            print(f"Error retrieving event: {e}")
+            print(f"Error updating event: {e}")
+    """
+
+    def update_event(self, event_id: int, updated_fields: dict, ):
+        try:
+            print(updated_fields)
+            self.sql_executor.update(self.table, updated_fields, condition=f'id={event_id}')
+        except sqlite3.Error as e:
+            print(f"Error updating event: {e}")
 
     def delete_event(self, event_id: str):
         try:
-            self.cursor.execute('DELETE FROM events WHERE id = ?', (event_id))
-            self.conn.commit()
+            self.sql_executor.delete(self.table, condition=f'id={event_id}')
+            #self.cursor.execute('DELETE FROM events WHERE id = ?', (event_id))
+            #self.conn.commit()
         except sqlite3.Error as e:
             print(f"Error deleting event: {e}")
 
