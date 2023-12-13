@@ -1,15 +1,12 @@
 import sqlite3
 from datetime import datetime
+from DL.SqlExecutor import SqlExecutor
 
 class EventDB:
     _instance = None
 
-    def __new__(cls, db_name='Application.db'):
-        if not cls._instance:
-            cls._instance = super().__new__(cls)
-            cls._instance.conn = sqlite3.connect(db_name, check_same_thread=False)
-            cls._instance.cursor = cls._instance.conn.cursor()
-        return cls._instance
+    def __init__(self):
+        self.db = SqlExecutor()
 
     def add_event(self, id: int, name: str, date: datetime, team1: str, team2: str, location: str, participants: int, creation_time: datetime):
         try:
@@ -27,6 +24,13 @@ class EventDB:
             return self.cursor.fetchone()
         except sqlite3.Error as e:
             print(f"Error retrieving event: {e}")
+
+    def delete_event(self, event_id: str):
+        try:
+            self.cursor.execute('DELETE FROM events WHERE id = ?', (event_id))
+            self.conn.commit()
+        except sqlite3.Error as e:
+            print(f"Error deleting event: {e}")
 
     def close_connection(self):
         try:
