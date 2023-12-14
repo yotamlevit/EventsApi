@@ -19,8 +19,8 @@ class EventManager:
                 return events, HTTPStatus.OK
             else:
                 return {"message": "There are no events at the moment"}, HTTPStatus.NOT_FOUND
-        except Exception as e:
-            return {"message": f"Error retrieving event details: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except Exception as err:
+            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_event(self, event_id: str) -> Tuple[dict, HTTPStatus]:
         try:
@@ -29,8 +29,8 @@ class EventManager:
                 return self.__parse_event(event[0]), HTTPStatus.OK
             else:
                 return {"message": "Event id={} not found".format(event_id)}, HTTPStatus.NOT_FOUND
-        except Exception as e:
-            return {"message": f"Error retrieving event details: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except Exception as err:
+            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_event_by_location(self, event_location) -> Tuple[dict, HTTPStatus]:
         try:
@@ -40,8 +40,8 @@ class EventManager:
                 return events, HTTPStatus.OK
             else:
                 return {"message": "Events location={} not found".format(event_location)}, HTTPStatus.NOT_FOUND
-        except Exception as e:
-            return {"message": f"Error retrieving event details: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except Exception as err:
+            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_event_by_sort_key(self, sort_key) -> Tuple[dict, HTTPStatus]:
         try:
@@ -51,8 +51,10 @@ class EventManager:
                 return events, HTTPStatus.OK
             else:
                 return {"message": "There are no events at the moment"}, HTTPStatus.NOT_FOUND
-        except Exception as e:
-            return {"message": f"Error retrieving event details: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except ValueError as value_err:
+            return {"message": value_err}, HTTPStatus.BAD_REQUEST
+        except Exception as err:
+            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def create_event(self, event: EventDTO) -> Tuple[dict, HTTPStatus]:
         try:

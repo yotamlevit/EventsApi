@@ -14,25 +14,34 @@ class EventRepo:
         self.fields.append("insertion_time")
 
     def get_events(self):
-        return self.sql_executor.select(self.table)
+        try:
+            return self.sql_executor.select(self.table)
+        except sqlite3.Error as sql_err:
+            print(f"Error retrieving event: {sql_err}")
+            raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_id(self, event_id):
         try:
             return self.sql_executor.select(self.table, condition=f'id={event_id}')
-        except sqlite3.Error as e:
-            print(f"Error retrieving event: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error retrieving event: {sql_err}")
+            raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_location(self, event_location):
         try:
             return self.sql_executor.select(self.table, condition=f'location="{event_location}"')
-        except sqlite3.Error as e:
-            print(f"Error retrieving event: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error retrieving event: {sql_err}")
+            raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_sort_key(self, sort_key):
         try:
             return self.sql_executor.select(self.table, order_by=sort_key)
-        except sqlite3.Error as e:
-            print(f"Error retrieving event: {e}")
+        except sqlite3.Error as sql_error:
+            if sql_error.sqlite_errorcode == 1:
+                raise ValueError(f'Invalid sort key key={sort_key}')
+            print(f"Error retrieving event: {sql_error}")
+            raise Exception(f"Unexpected error retrieving events")
 
     def create_event(self, event: EventDTO, insertion_time: datetime):
         try:
@@ -40,14 +49,14 @@ class EventRepo:
             event_values.append(insertion_time)
             print(event_values)
             self.sql_executor.insert(self.table, self.fields, event_values)
-        except sqlite3.Error as e:
-            print(f"Error adding event: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error adding event: {sql_err}")
 
     def update_event(self, event_id: int, updated_fields: dict, ):
         try:
             self.sql_executor.update(self.table, updated_fields, condition=f'id={event_id}')
-        except sqlite3.Error as e:
-            print(f"Error updating event: {e}")
+        except sqlite3.Error as sql_error:
+            print(f"Error updating event: {sql_error}")
 
     def delete_event(self, event_id: str):
         try:

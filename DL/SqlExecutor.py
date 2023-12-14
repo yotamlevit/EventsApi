@@ -24,16 +24,18 @@ class SqlExecutor:
                 self.cursor.execute(query)
             rows = self.cursor.fetchall()
             return rows
-        except sqlite3.Error as e:
-            print(f"Error executing SELECT query: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error executing SELECT query: {sql_err}")
+            raise sql_err
 
     def insert(self, table, columns, values):
         query = f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(['?'] * len(values))})"
         try:
             self.cursor.execute(query, values)
             self.connection.commit()
-        except sqlite3.Error as e:
-            print(f"Error executing INSERT query: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error executing INSERT query: {sql_err}")
+            raise sql_err
 
     def update(self, table, update_values: dict, condition='', params=None):
         set_keys = ', '.join([f'{key}=?' for key in update_values.keys()])
@@ -49,8 +51,9 @@ class SqlExecutor:
             else:
                 self.cursor.execute(query, set_values)
             self.connection.commit()
-        except sqlite3.Error as e:
-            print(f"Error executing UPDATE query: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error executing UPDATE query: {sql_err}")
+            raise sql_err
 
     def delete(self, table, condition='', params=None):
         query = f"DELETE FROM {table}"
@@ -62,11 +65,13 @@ class SqlExecutor:
             else:
                 self.cursor.execute(query)
             self.connection.commit()
-        except sqlite3.Error as e:
-            print(f"Error executing DELETE query: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error executing DELETE query: {sql_err}")
+            raise sql_err
 
     def close_connection(self):
         try:
             self.connection.close()
-        except sqlite3.Error as e:
-            print(f"Error closing connection: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error closing connection: {sql_err}")
+            raise sql_err
