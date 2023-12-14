@@ -67,6 +67,6 @@ class SqlExecutor:
 
     def close_connection(self):
         try:
-            self.conn.close()
+            self.connection.close()
         except sqlite3.Error as e:
             print(f"Error closing connection: {e}")

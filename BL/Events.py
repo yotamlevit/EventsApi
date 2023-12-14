@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pytz
 import sqlite3
-from .DTO import EventDTO, EventDTO
+from .DTO import EventDTO
 from DL import EventRepo
 from http import HTTPStatus
 
