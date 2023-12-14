@@ -64,12 +64,8 @@ class EventManager:
                 return True, HTTPStatus.OK
             else:
                 return {"message": f"Error scheduling event: event time has already past"}, HTTPStatus.BAD_REQUEST
-        except ValueError as e:
-            return {"message": f"Error scheduling event: {e}"}, HTTPStatus.BAD_REQUEST
-        except sqlite3.Error as e:
-            return {"message": f"Error adding event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
-        except Exception as e:
-            return {"message": f"Unexpected error scheduling event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except Exception as err:
+            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def update_event(self, event_id: int, updated_fields: dict) -> Tuple[dict, HTTPStatus]:
         try:
