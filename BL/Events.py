@@ -70,8 +70,15 @@ class EventManager:
             return {"message": f"Unexpected error scheduling event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def update_event(self, event_id: int, updated_fields: dict) -> Tuple[dict, HTTPStatus]:
-        updated_fields['insertion_time'] = 'asdasda'#str(pytz.utc.localize(datetime.now()))
-        return self.events_repo.update_event(event_id, updated_fields)
+        try:
+            updated_fields['insertion_time'] = 'asdasda'#str(pytz.utc.localize(datetime.now()))
+            return self.events_repo.update_event(event_id, updated_fields)
+        except ValueError as e:
+            return {"message": f"Error updating event: {e}"}, HTTPStatus.BAD_REQUEST
+        except sqlite3.Error as e:
+            return {"message": f"Error updating event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except Exception as e:
+            return {"message": f"Unexpected error updating event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def delete_event_by_id(self, event_id: str) -> Tuple[dict, HTTPStatus]:
         try:
