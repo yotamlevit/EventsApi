@@ -16,8 +16,8 @@ def get_events(event_manager = Depends(bl_factory)):
 
 
 @events_api.get("/{event_id}")
-def get_event(event_id: int, event_manager = Depends(bl_factory)):
-    content, status_code = event_manager.get_event(event_id)
+def get_event_by_id(event_id: int, event_manager = Depends(bl_factory)):
+    content, status_code = event_manager.get_event_by_id(event_id)
     return JSONResponse(status_code=status_code, content=content)
 
 
@@ -29,6 +29,7 @@ def delete_event(event_id: int, event_manager = Depends(bl_factory)):
 @events_api.put("/{event_id}")
 def update_event(event_id: int, event_data : dict = Body(), event_manager = Depends(bl_factory)):
     content, status_code = event_manager.update_event(event_id, event_data)
+    print(content, status_code)
     return JSONResponse(status_code=status_code, content=content)
 
 

@@ -51,13 +51,14 @@ class EventRepo:
             self.sql_executor.insert(self.table, self.fields, event_values)
         except sqlite3.Error as sql_err:
             print(f"Error adding event: {sql_err}")
-            raise Exception(f"Unexpected error while inserting new events")
+            raise Exception(f"Unexpected error while inserting new events: {sql_err}")
 
     def update_event(self, event_id: int, updated_fields: dict, ):
         try:
             self.sql_executor.update(self.table, updated_fields, condition=f'id={event_id}')
-        except sqlite3.Error as sql_error:
-            print(f"Error updating event: {sql_error}")
+        except sqlite3.Error as sql_err:
+            print(f"Error updating event: {sql_err}")
+            raise Exception(f"Unexpected error while updating event: {sql_err}")
 
     def delete_event(self, event_id: str):
         try:

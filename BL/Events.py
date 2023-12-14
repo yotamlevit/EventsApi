@@ -20,9 +20,9 @@ class EventManager:
             else:
                 return {"message": "There are no events at the moment"}, HTTPStatus.NOT_FOUND
         except Exception as err:
-            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    def get_event(self, event_id: str) -> Tuple[dict, HTTPStatus]:
+    def get_event_by_id(self, event_id: str) -> Tuple[dict, HTTPStatus]:
         try:
             event = self.events_repo.get_event_by_id(event_id)
             if event:
@@ -30,7 +30,7 @@ class EventManager:
             else:
                 return {"message": "Event id={} not found".format(event_id)}, HTTPStatus.NOT_FOUND
         except Exception as err:
-            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_event_by_location(self, event_location) -> Tuple[dict, HTTPStatus]:
         try:
@@ -41,7 +41,7 @@ class EventManager:
             else:
                 return {"message": "Events location={} not found".format(event_location)}, HTTPStatus.NOT_FOUND
         except Exception as err:
-            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_event_by_sort_key(self, sort_key) -> Tuple[dict, HTTPStatus]:
         try:
@@ -52,9 +52,9 @@ class EventManager:
             else:
                 return {"message": "There are no events at the moment"}, HTTPStatus.NOT_FOUND
         except ValueError as value_err:
-            return {"message": value_err}, HTTPStatus.BAD_REQUEST
+            return {"message": str(value_err)}, HTTPStatus.BAD_REQUEST
         except Exception as err:
-            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def create_event(self, event: EventDTO) -> Tuple[dict, HTTPStatus]:
         try:
@@ -65,18 +65,20 @@ class EventManager:
             else:
                 return {"message": f"Error scheduling event: event time has already past"}, HTTPStatus.BAD_REQUEST
         except Exception as err:
-            return {"message": err}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return {"message": str(err), "event_data": event.__dict__}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def update_event(self, event_id: int, updated_fields: dict) -> Tuple[dict, HTTPStatus]:
         try:
+            _, status_code = self.get_event_by_id(event_id)
+            if status_code != HTTPStatus.OK:
+                raise ValueError(f"Event with id {event_id} does not exist")
+
             updated_fields['insertion_time'] = 'asdasda'#str(pytz.utc.localize(datetime.now()))
-            return self.events_repo.update_event(event_id, updated_fields)
-        except ValueError as e:
-            return {"message": f"Error updating event: {e}"}, HTTPStatus.BAD_REQUEST
-        except sqlite3.Error as e:
-            return {"message": f"Error updating event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
-        except Exception as e:
-            return {"message": f"Unexpected error updating event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+            return self.events_repo.update_event(event_id, updated_fields), HTTPStatus.OK
+        except ValueError as value_err:
+            return {"message": str(value_err), "event_data": {"id": event_id, "update_fields": updated_fields}}, HTTPStatus.BAD_REQUEST
+        except Exception as err:
+            return {"message": str(err), "event_data": {"id": event_id, "update_fields": updated_fields}}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def delete_event_by_id(self, event_id: str) -> Tuple[dict, HTTPStatus]:
         try:
