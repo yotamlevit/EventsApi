@@ -59,7 +59,9 @@ class EventManager:
             insertion_time = pytz.utc.localize(datetime.now())
             if event.date > insertion_time:
                 self.events_repo.create_event(event, insertion_time=insertion_time)
-                return True, HTTPStatus.OK
+                events, _ = self.get_event_by_sort_key("id")
+
+                return {"message": "Event created", "event_id": events[-1]["id"]}, HTTPStatus.OK
             else:
                 return {"message": f"Error scheduling event: event time has already past"}, HTTPStatus.BAD_REQUEST
         except Exception as err:
@@ -72,6 +74,7 @@ class EventManager:
                 raise ValueError(f"Event with id {event_id} does not exist")
 
             updated_fields['insertion_time'] = 'asdasda'#str(pytz.utc.localize(datetime.now()))
+
             return self.events_repo.update_event(event_id, updated_fields), HTTPStatus.OK
         except ValueError as value_err:
             return {"message": str(value_err), "event_data": {"id": event_id, "update_fields": updated_fields}}, HTTPStatus.BAD_REQUEST
