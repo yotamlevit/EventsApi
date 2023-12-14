@@ -63,8 +63,9 @@ class EventRepo:
     def delete_event(self, event_id: str):
         try:
             self.sql_executor.delete(self.table, condition=f'id={event_id}')
-        except sqlite3.Error as e:
-            print(f"Error deleting event: {e}")
+        except sqlite3.Error as sql_err:
+            print(f"Error deleting event: {sql_err}")
+            raise Exception(f"Unexpected error while deleting event: {sql_err}")
 
     def close_connection(self):
         try:

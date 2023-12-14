@@ -82,10 +82,16 @@ class EventManager:
 
     def delete_event_by_id(self, event_id: str) -> Tuple[dict, HTTPStatus]:
         try:
+            _, status_code = self.get_event_by_id(event_id)
+            if status_code != HTTPStatus.OK:
+                raise ValueError(f"Event with id {event_id} does not exist")
+
             self.events_repo.delete_event(event_id)
             return {"message": f"Event Deleted: event id={event_id} has been removed"}, HTTPStatus.OK
-        except Exception as e:
-            return {"message": f"Error deleting event: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+        except ValueError as value_err:
+            return {"message": str(value_err)}, HTTPStatus.BAD_REQUEST
+        except Exception as err:
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def __parse_event(self, event_data: list) -> dict:
         return {
