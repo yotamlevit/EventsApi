@@ -20,21 +20,21 @@ class EventRepo:
             print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
-    def get_event_by_id(self, event_id):
+    def get_event_by_id(self, event_id: int):
         try:
             return self.sql_executor.select(self.table, condition=f'id={event_id}')
         except sqlite3.Error as sql_err:
             print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
-    def get_event_by_location(self, event_location):
+    def get_event_by_location(self, event_location: str):
         try:
             return self.sql_executor.select(self.table, condition=f'location="{event_location}"')
         except sqlite3.Error as sql_err:
             print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
-    def get_event_by_sort_key(self, sort_key):
+    def get_event_by_sort_key(self, sort_key: str):
         try:
             return self.sql_executor.select(self.table, order_by=sort_key)
         except sqlite3.Error as sql_error:
@@ -60,7 +60,7 @@ class EventRepo:
             print(f"Error updating event: {sql_err}")
             raise Exception(f"Unexpected error while updating event: {sql_err}")
 
-    def delete_event(self, event_id: str):
+    def delete_event(self, event_id: int):
         try:
             self.sql_executor.delete(self.table, condition=f'id={event_id}')
         except sqlite3.Error as sql_err:

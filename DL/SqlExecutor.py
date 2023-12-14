@@ -1,5 +1,7 @@
 import sqlite3
 from datetime import datetime
+from typing import List
+
 
 class SqlExecutor:
     _instance = None
@@ -11,7 +13,7 @@ class SqlExecutor:
             cls._instance.cursor = cls._instance.connection.cursor()
         return cls._instance
 
-    def select(self, table, columns='*', condition='', order_by='', params=None):
+    def select(self, table: str, columns='*', condition='', order_by='', params=None):
         query = f"SELECT {columns} FROM {table}"
         if condition:
             query += f" WHERE {condition}"
@@ -28,7 +30,7 @@ class SqlExecutor:
             print(f"Error executing SELECT query: {sql_err}")
             raise sql_err
 
-    def insert(self, table, columns, values):
+    def insert(self, table: str, columns: List[str], values: List[str]):
         query = f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(['?'] * len(values))})"
         try:
             self.cursor.execute(query, values)
@@ -37,7 +39,7 @@ class SqlExecutor:
             print(f"Error executing INSERT query: {sql_err}")
             raise sql_err
 
-    def update(self, table, update_values: dict, condition='', params=None):
+    def update(self, table: str, update_values: dict, condition='', params=None):
         set_keys = ', '.join([f'{key}=?' for key in update_values.keys()])
         set_values = list(update_values.values())
 
@@ -55,7 +57,7 @@ class SqlExecutor:
             print(f"Error executing UPDATE query: {sql_err}")
             raise sql_err
 
-    def delete(self, table, condition='', params=None):
+    def delete(self, table: str, condition='', params=None):
         query = f"DELETE FROM {table}"
         if condition:
             query += f" WHERE {condition}"

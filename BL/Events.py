@@ -9,7 +9,7 @@ class EventManager:
     def __init__(self):
         self.events_repo = EventRepo()
 
-    def get_events(self) -> Tuple[dict, HTTPStatus]:
+    def get_events(self) -> Tuple[list, HTTPStatus]:
         try:
             events = self.events_repo.get_events()
             if events:
@@ -30,7 +30,7 @@ class EventManager:
         except Exception as err:
             return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    def get_event_by_location(self, event_location) -> Tuple[dict, HTTPStatus]:
+    def get_event_by_location(self, event_location: str) -> Tuple[dict, HTTPStatus]:
         try:
             events = self.events_repo.get_event_by_location(event_location)
             if events:
@@ -41,7 +41,7 @@ class EventManager:
         except Exception as err:
             return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-    def get_event_by_sort_key(self, sort_key) -> Tuple[dict, HTTPStatus]:
+    def get_event_by_sort_key(self, sort_key: str) -> Tuple[list, HTTPStatus]:
         try:
             events = self.events_repo.get_event_by_sort_key(sort_key)
             if events:

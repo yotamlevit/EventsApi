@@ -40,12 +40,12 @@ def create_event(event_data : EventDTO = Body(), event_manager = Depends(bl_fact
 
 
 @events_api.get('/location/{event_location}')
-def get_event_by_location(event_location, event_manager = Depends(bl_factory)):
+def get_event_by_location(event_location: str, event_manager = Depends(bl_factory)):
     content, status_code = event_manager.qwget_event_by_location(event_location)
     return JSONResponse(status_code=status_code, content=content)
 
 @events_api.get('/sort/{sort_key}')
-def get_event_by_sort_key(sort_key, event_manager = Depends(bl_factory)):
+def get_event_by_sort_key(sort_key: str, event_manager = Depends(bl_factory)):
     content, status_code = event_manager.get_event_by_sort_key(sort_key)
     return JSONResponse(status_code=status_code, content=content)
 
