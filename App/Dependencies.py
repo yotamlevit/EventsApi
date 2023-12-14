@@ -2,7 +2,6 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import HTTPException, Depends, Request
 from http import HTTPStatus
 from BL import EventManager
-from urllib.parse import urlparse
 
 
 

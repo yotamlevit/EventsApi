@@ -1,7 +1,10 @@
 from fastapi import FastAPI, Depends
 from .Routers import initialize_routers
-from .Dependencies import authenticate, bl_factory
-
+from .Dependencies import authenticate
+from slowapi.errors import RateLimitExceeded
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.middleware import SlowAPIMiddleware
 
 tags_metadata = [
     {
@@ -40,5 +43,9 @@ You will be able to:
 
 def app() -> FastAPI:
     app = FastAPI(description=description , openapi_tags=tags_metadata, dependencies=[Depends(authenticate)])
+    limiter = Limiter(key_func=get_remote_address, default_limits=["5/5seconds"])
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_middleware(SlowAPIMiddleware)
     initialize_routers(app)
     return app
