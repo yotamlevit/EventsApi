@@ -1,11 +1,9 @@
 from datetime import datetime
 from typing import Tuple
-
 import pytz
-import sqlite3
+from http import HTTPStatus
 from .DTO import EventDTO
 from DL import EventRepo
-from http import HTTPStatus
 
 class EventManager:
     def __init__(self):
