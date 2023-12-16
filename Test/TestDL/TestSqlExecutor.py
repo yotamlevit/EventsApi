@@ -2,7 +2,6 @@ import sqlite3
 from DL.SqlExecutor import SqlExecutor
 
 import pytest
-import sqlite3
 from DL.SqlExecutor import SqlExecutor
 
 
