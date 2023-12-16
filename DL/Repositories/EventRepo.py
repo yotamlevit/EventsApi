@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from DL.SqlExecutor import SqlExecutor
-from BL import EventDTO
+from DTO import EventDTO
 import inspect
 
 class EventRepo:
@@ -10,7 +10,6 @@ class EventRepo:
         self.sql_executor = SqlExecutor()
         self.table = 'events'
         self.fields = list(EventDTO.model_fields.keys())
-        #self.fields.insert(0, 'id')
         self.fields.append("insertion_time")
 
     def get_events(self):

@@ -2,12 +2,13 @@ from datetime import datetime
 from typing import Tuple
 import pytz
 from http import HTTPStatus
-from .DTO import EventDTO
+from DTO import EventDTO
 from DL import EventRepo
 
 class EventManager:
-    def __init__(self):
+    def __init__(self, user_permissions):
         self.events_repo = EventRepo()
+        self.user_permissions = 1
 
     def get_events(self) -> Tuple[list, HTTPStatus]:
         try:

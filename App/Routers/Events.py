@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Body
 from fastapi.responses import JSONResponse
 from App.Dependencies import bl_factory
-from BL.DTO import EventDTO
+from DTO import EventDTO
 
 events_api = APIRouter(
     prefix="/events",
