@@ -55,10 +55,17 @@ class EventRepo:
 
     def update_event(self, event_id: int, updated_fields: dict, ):
         try:
+            if not set(list(updated_fields.keys())).issubset(self.fields[:-1]):
+                raise ValueError
+
             self.sql_executor.update(self.table, updated_fields, condition=f'id={event_id}')
+
         except sqlite3.Error as sql_err:
             print(f"Error updating event: {sql_err}")
             raise Exception(f"Unexpected error while updating event: {sql_err}")
+        except ValueError:
+            raise ValueError(f'Invalid field to update. The allowd fields are: {self.fields[:-1]}')
+
 
     def delete_event(self, event_id: int):
         try:
