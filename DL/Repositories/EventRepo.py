@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime
 from DL.SqlExecutor import SqlExecutor
 from DTO import EventDTO
-import inspect
+import pytz
 
 class EventRepo:
 
@@ -42,8 +42,9 @@ class EventRepo:
             print(f"Error retrieving event: {sql_error}")
             raise Exception(f"Unexpected error retrieving events")
 
-    def create_event(self, event: EventDTO, insertion_time: datetime):
+    def create_event(self, event: EventDTO):
         try:
+            insertion_time = pytz.utc.localize(datetime.now())
             event_values = list(event.__dict__.values())
             event_values.append(insertion_time)
             print(event_values)
@@ -62,6 +63,13 @@ class EventRepo:
     def delete_event(self, event_id: int):
         try:
             self.sql_executor.delete(self.table, condition=f'id={event_id}')
+        except sqlite3.Error as sql_err:
+            print(f"Error deleting event: {sql_err}")
+            raise Exception(f"Unexpected error while deleting event: {sql_err}")
+
+    def delete_all(self):
+        try:
+            self.sql_executor.delete(self.table)
         except sqlite3.Error as sql_err:
             print(f"Error deleting event: {sql_err}")
             raise Exception(f"Unexpected error while deleting event: {sql_err}")
