@@ -48,11 +48,3 @@ def get_event_by_location(event_location: str, event_manager = Depends(bl_factor
 def get_event_by_sort_key(sort_key: str, event_manager = Depends(bl_factory)):
     content, status_code = event_manager.get_event_by_sort_key(sort_key)
     return JSONResponse(status_code=status_code, content=content)
-
-@events_api.get("/{event_name}")
-def get_event_by_name(event_name: str, event_manager = Depends(bl_factory)):
-    pass
-
-@events_api.delete("/name/{event_name}")
-def delete_event_by_name(event_name: str, event_manager = Depends(bl_factory)):
-    pass
