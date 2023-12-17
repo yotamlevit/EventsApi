@@ -74,7 +74,6 @@ class EventManager:
             if status_code != HTTPStatus.OK:
                 raise ValueError(f"Event with id {event_id} does not exist")
 
-            updated_fields['insertion_time'] = 'asdasda'#str(pytz.utc.localize(datetime.now()))
             self.events_repo.update_event(event_id, updated_fields)
 
             return {"message": f"Event id={event_id} updated", "event_data": {"id": event_id, "update_fields": updated_fields}}, HTTPStatus.OK
