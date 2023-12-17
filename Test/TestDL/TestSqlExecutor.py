@@ -1,13 +1,13 @@
 from .BaseDLTest import BaseDLTest
 
 class TestSqlExecutor(BaseDLTest):
-    @classmethod
+
     def setup_class(cls):
         table_name = 'test_table'
         table_columns = ["name", "value1"]
         table_values = [["select_test", "value1"], ["update_test", "value2"], ["delete_test", "value3"]]
         create_table_query = f'''CREATE TABLE {table_name} (id INTEGER, name TEXT, value1 TEXT, PRIMARY KEY("id" AUTOINCREMENT))'''
-        super().setup_class(table_name=table_name, table_columns=table_columns, table_values=table_values, create_table_query=create_table_query)
+        super().setup_class(cls, table_name=table_name, table_columns=table_columns, table_values=table_values, create_table_query=create_table_query)
 
     def test_select(self):
         test_name = 'select_test'
@@ -18,7 +18,6 @@ class TestSqlExecutor(BaseDLTest):
         result_name = self.sql_executor.select(self.table_name, columns='name', condition=condition)
 
         result = self.sql_executor.select(self.table_name)
-        print(result)
 
         assert result_name == [(test_name,)]
 
