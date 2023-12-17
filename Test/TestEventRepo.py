@@ -5,8 +5,7 @@ from .BaseDLTest import BaseDLTest
 
 
 class TestEventTable(BaseDLTest):
-    def setup_class(self):
-        table_name = 'events'
+    def setup_class(self, table_name):
         table_columns = ["name", "date", "team1", "team2", "location", "participants", "insertion_time"]
         table_values = [["event1", "date", "team1", "team2", "location", "participants", "insertion_time"],
                         ["event2", "date", "team1", "team2", "location", "participants", "insertion_time"],
@@ -18,9 +17,10 @@ class TestEventTable(BaseDLTest):
 class TestEventRepo(TestEventTable):
 
     def setup_class(self):
-        super().setup_class(self)
+        test_table = "TestEventRepo"
+        super().setup_class(self, test_table)
 
-        self.event_repo = EventRepo()
+        self.event_repo = EventRepo(test_table)
 
     def test_get_event_by_id(self):
         id = 1
@@ -76,3 +76,4 @@ class TestEventRepo(TestEventTable):
         no_events_result = self.event_repo.get_events()
         assert isinstance(events, list)
         assert no_events_result == []
+

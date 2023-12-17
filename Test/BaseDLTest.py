@@ -23,6 +23,4 @@ class BaseDLTest:
     def __create_test_table(self, create_table_query):
         if not self.__check_table_exist(self):
             self.sql_executor.cursor.execute(create_table_query)
-        else:
-            self.sql_executor.cursor.execute(f'DELETE FROM {self.table_name}')
-        self.__insert_test_values(self)
+            self.__insert_test_values(self)
