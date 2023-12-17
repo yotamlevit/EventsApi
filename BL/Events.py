@@ -65,6 +65,8 @@ class EventManager:
                 return {"message": "Event created", "event_id": events[-1]["id"]}, HTTPStatus.OK
             else:
                 return {"message": f"Error scheduling event: event time has already past"}, HTTPStatus.BAD_REQUEST
+        except TypeError as type_err:
+            return {"message": str(type_err)}, HTTPStatus.BAD_REQUEST
         except Exception as err:
             return {"message": str(err), "event_data": event.__dict__}, HTTPStatus.INTERNAL_SERVER_ERROR
 
