@@ -46,7 +46,6 @@ class SqlExecutor:
         query = f"UPDATE {table} SET {set_keys}"
         if condition:
             query += f" WHERE {condition}"
-        print(query)
         try:
             if params:
                 self.cursor.execute(query, params)
