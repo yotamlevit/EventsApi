@@ -59,7 +59,7 @@ class EventManager:
         try:
             insertion_time = pytz.utc.localize(datetime.now())
             if event.date > insertion_time:
-                self.events_repo.create_event(event, insertion_time=insertion_time)
+                self.events_repo.create_event(event)
                 events, _ = self.get_event_by_sort_key("id")
 
                 return {"message": "Event created", "event_id": events[-1]["id"]}, HTTPStatus.OK
