@@ -6,9 +6,9 @@ import pytz
 
 class EventRepo:
 
-    def __init__(self):
+    def __init__(self, table='events'):
         self.sql_executor = SqlExecutor()
-        self.table = 'events'
+        self.table = table
         self.fields = list(EventDTO.model_fields.keys())
         self.fields.append("insertion_time")
 
