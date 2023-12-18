@@ -76,7 +76,6 @@ class EventRepo:
         except ValueError:
             raise ValueError(f'Invalid field to update. The allowd fields are: {self.fields[:-1]}')
 
-
     def delete_event(self, event_id: int):
         try:
             self.sql_executor.delete(self.table, condition=f'id={event_id}')
