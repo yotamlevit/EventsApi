@@ -40,9 +40,9 @@ class EventRepo:
 
     def get_upcoming_events(self):
         try:
-            time_condition = "start_time > ?"
             current_time = pytz.utc.localize(datetime.now())
-            upcoming_events = self.sql_executor.select(self.table, condition=time_condition, params=current_time)
+            time_condition = f'start_time > "{current_time}"'
+            upcoming_events = self.sql_executor.select(self.table, condition=time_condition)
             return upcoming_events
         except sqlite3.Error as sql_err:
             raise Exception(f"Unexpected error while fetching upcoming events: {sql_err}")
