@@ -13,17 +13,14 @@ class SqlExecutor:
             cls._instance.cursor = cls._instance.connection.cursor()
         return cls._instance
 
-    def select(self, table: str, columns='*', condition='', order_by='', params=None):
+    def select(self, table: str, columns='*', condition='', order_by=''):
         query = f"SELECT {columns} FROM {table}"
         if condition:
             query += f" WHERE {condition}"
         if order_by:
             query += f" ORDER BY {order_by}"
         try:
-            if params:
-                self.cursor.execute(query, params)
-            else:
-                self.cursor.execute(query)
+            self.cursor.execute(query)
             rows = self.cursor.fetchall()
             return rows
         except sqlite3.Error as sql_err:
@@ -39,7 +36,7 @@ class SqlExecutor:
             print(f"Error executing INSERT query: {sql_err}")
             raise sql_err
 
-    def update(self, table: str, update_values: dict, condition='', params=None):
+    def update(self, table: str, update_values: dict, condition=''):
         set_keys = ', '.join([f'{key}=?' for key in update_values.keys()])
         set_values = list(update_values.values())
 
@@ -47,24 +44,18 @@ class SqlExecutor:
         if condition:
             query += f" WHERE {condition}"
         try:
-            if params:
-                self.cursor.execute(query, params)
-            else:
-                self.cursor.execute(query, set_values)
+            self.cursor.execute(query, set_values)
             self.connection.commit()
         except sqlite3.Error as sql_err:
             print(f"Error executing UPDATE query: {sql_err}")
             raise sql_err
 
-    def delete(self, table: str, condition='', params=None):
+    def delete(self, table: str, condition=''):
         query = f"DELETE FROM {table}"
         if condition:
             query += f" WHERE {condition}"
         try:
-            if params:
-                self.cursor.execute(query, params)
-            else:
-                self.cursor.execute(query)
+            self.cursor.execute(query)
             self.connection.commit()
         except sqlite3.Error as sql_err:
             print(f"Error executing DELETE query: {sql_err}")
