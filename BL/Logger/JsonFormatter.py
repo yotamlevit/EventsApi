@@ -4,9 +4,9 @@ import traceback
 
 
 class JsonFormatter(logging.Formatter):
-    def __init__(self, datafmt):
-        self._datafmt = {"message": "message", "@timestamp": "asctime", "level": "levelname"}
-        super().__init__(datafmt)
+    def __init__(self, datefmt):
+        self.dictfmt = {"message": "message", "@timestamp": "asctime", "level": "levelname"}
+        super().__init__(datefmt=datefmt)
 
     def formatMessage(self, record) -> dict:
         return {format_key: record.__dict__[format_value] for format_key, format_value in self._datafmt.items()}
