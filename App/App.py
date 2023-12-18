@@ -44,7 +44,7 @@ You will be able to:
 
 
 def app() -> FastAPI:
-    logger.info("Initializing App")
+    logger.debug("Initializing App")
     app = FastAPI(description=description, openapi_tags=tags_metadata, dependencies=[Depends(authentication)])
     limiter = Limiter(key_func=get_remote_address, default_limits=["5/5seconds"])
     app.state.limiter = limiter
