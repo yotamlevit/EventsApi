@@ -5,6 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
+from BL.Logger import Logger as logger
 
 tags_metadata = [
     {
@@ -41,11 +42,14 @@ You will be able to:
 * **Read users** (_not implemented_).
 """
 
+
 def app() -> FastAPI:
+    logger.info("Initializing App")
     app = FastAPI(description=description, openapi_tags=tags_metadata, dependencies=[Depends(authentication)])
     limiter = Limiter(key_func=get_remote_address, default_limits=["5/5seconds"])
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
     app.add_middleware(SlowAPIMiddleware)
     initialize_routers(app)
+    logger.info("Starting App")
     return app
