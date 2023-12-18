@@ -4,8 +4,8 @@ from DL.SqlExecutor import SqlExecutor
 from DTO import EventDTO
 import pytz
 
-class EventRepo:
 
+class EventRepo:
     def __init__(self, table='events'):
         self.sql_executor = SqlExecutor()
         self.table = table
