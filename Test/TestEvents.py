@@ -59,9 +59,7 @@ class TestEvents(BaseEventsTest):
         bad_time_event = EventDTO(name='test_event', start_time=datetime.now(), team1='Team A', team2='Team B',
                                   location=event_location, participants=100)
 
-        print(event)
         response, status_code = self.event_manager.create_event(event)
-        print(response)
         event_id = response["event_id"]
         bad_time_response, bad_time_status_code = self.event_manager.create_event(bad_time_event)
         past_time_response, past_time_status_code = self.event_manager.create_event(past_time_event)
@@ -97,10 +95,10 @@ class TestEvents(BaseEventsTest):
         assert response == {"message": f"Event id={id} updated","event_data": {"id": id,"update_fields": {"name": "test_update_event"}}}
 
         assert id_not_exists_status_code is HTTPStatus.BAD_REQUEST
-        assert id_not_exists_response == {"message": f"Event with id {invalid_id} does not exist","event_data": {"id": invalid_id,"update_fields": {"name": "test_update_event"}}}
+        assert id_not_exists_response == {"message": f"Cannot update event - Event with id {invalid_id} does not exist","event_data": {"id": invalid_id,"update_fields": {"name": "test_update_event"}}}
 
         assert invalid_field_status_code is HTTPStatus.BAD_REQUEST
-        assert invalid_field_response == {"message": "Invalid field to update. The allowd fields are: ['name', 'start_time', 'team1', 'team2', 'location', 'participants']","event_data": {"id": id,"update_fields": {"not_name": "test_update_event"}}}
+        assert invalid_field_response == {"message": "Cannot update event - Invalid field to update. The allowd fields are: ['name', 'start_time', 'team1', 'team2', 'location', 'participants']","event_data": {"id": id,"update_fields": {"not_name": "test_update_event"}}}
 
     def test_delete_event_by_id(self):
         id=1
@@ -111,7 +109,7 @@ class TestEvents(BaseEventsTest):
         assert response == {"message": f"Event Deleted: event id={id} has been removed"}
         assert not_found_status_code is HTTPStatus.NOT_FOUND
         assert bad_delete_status_code is HTTPStatus.BAD_REQUEST
-        assert bad_delete_response == {"message": f"Event with id {id} does not exist"}
+        assert bad_delete_response == {"message": f"Cannot delete event - Event with id {id} does not exist"}
 
     def test_get_events(self):
         events, status_code = self.event_manager.get_events()
