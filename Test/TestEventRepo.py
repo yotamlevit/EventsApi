@@ -6,13 +6,20 @@ from .BaseDLTest import BaseDLTest
 
 class TestEventTable(BaseDLTest):
     def setup_class(self, table_name):
-        table_columns = ["name", "time", "team1", "team2", "location", "participants", "creation_time"]
+        #table_columns = ["name", "start_time", "team1", "team2", "location", "participants", "creation_time"]
+        table_columns = {"name": "Text",
+                         "start_time": "TEXT",
+                         "team1": "TEXT",
+                         "team2": "TEXT",
+                         "location": "TEXT",
+                         "participants": "INTEGER",
+                         "creation_time": "TEXT"}
+
         table_values = [["event1", "time", "team1", "team2", "location", "participants", "creation_time"],
                         ["event2", "time", "team1", "team2", "location", "participants", "creation_time"],
                         ["event3", "time", "team1", "team2", "location", "participants", "creation_time"],]
-        create_table_query = f'''CREATE TABLE {table_name} (id INTEGER, name TEXT, date TEXT, team1 TEXT, team2 TEXT, location TEXT, participants INTEGER, insertion_time TEXT, PRIMARY KEY("id" AUTOINCREMENT))'''
-        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values, create_table_query=create_table_query)
 
+        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values)
 
 class TestEventRepo(TestEventTable):
 
@@ -44,7 +51,7 @@ class TestEventRepo(TestEventTable):
 
     def test_create_event(self):
         event_location = 'test_location'
-        event = EventDTO(name='test_event', date=datetime.now(), team1='Team A', team2='Team B',
+        event = EventDTO(name='test_event', start_time=datetime.now(), team1='Team A', team2='Team B',
                          location=event_location, participants=100)
         self.event_repo.create_event(event)
         events = self.event_repo.get_event_by_location(event_location)

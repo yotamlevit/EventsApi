@@ -2,11 +2,17 @@ from DL.SqlExecutor import SqlExecutor
 
 
 class BaseDLTest:
-    def setup_class(self, table_name, table_columns , table_values, create_table_query):
+    def setup_class(self, table_name, table_columns , table_values):
         self.table_name = table_name
-        self.table_columns = table_columns
+        self.table_columns = list(table_columns.keys())
         self.table_values = table_values
         self.sql_executor = SqlExecutor(db_name=':memory:')
+
+        parsed_columns = [f"{key} {type}" for key, type in table_columns.items()]
+        parsed_columns.insert(0, 'id INTEGER')
+        parsed_columns.append('PRIMARY KEY("id" AUTOINCREMENT)')
+        create_table_query = f'''CREATE TABLE {table_name} ({', '.join(parsed_columns)})'''
+
         self.__create_test_table(self, create_table_query=create_table_query)
 
     def __insert_test_values(self):

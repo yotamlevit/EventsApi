@@ -5,10 +5,9 @@ class TestSqlExecutor(BaseDLTest):
 
     def setup_class(self):
         table_name = 'test_table'
-        table_columns = ["name", "value1"]
+        table_columns = {"name": "TEXT", "value1": "TEXT"}
         table_values = [["select_test", "value1"], ["update_test", "value2"], ["delete_test", "value3"]]
-        create_table_query = f'''CREATE TABLE {table_name} (id INTEGER, name TEXT, value1 TEXT, PRIMARY KEY("id" AUTOINCREMENT))'''
-        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values, create_table_query=create_table_query)
+        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values)
 
     def test_select(self):
         test_name = 'select_test'
