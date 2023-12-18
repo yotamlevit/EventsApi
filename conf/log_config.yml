@@ -1,0 +1,41 @@
+disable_existing_loggers: false
+formatters:
+  json_formatter:
+    (): BL.Logger.JsonFormatter.JsonFormatter
+    datefmt: "%m/%d/%Y %H:%M:%S"
+
+filters:
+  filter_non_root_logs:
+    (): BL.Logger.LogsFilter.NonRootLogsFilter
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: json_formatter
+    level: DEBUG
+    stream: ext://sys.stdout
+  file:
+    backupCount: 5
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/app-logs.log
+    mode: 'a'
+    formatter: json_formatter
+    encoding: 'utf-8'
+    level: INFO
+    maxBytes: 524880
+  filebeat:
+    backupCount: 5
+    class: logging.handlers.RotatingFileHandler
+    filename: logs/app-logs-json.log
+    mode: 'a'
+    formatter: json_formatter
+    encoding: 'utf-8'
+    level: INFO
+    maxBytes: 524880
+
+root:
+  handlers:
+    - console
+    - file
+  level: INFO
+version: 1
