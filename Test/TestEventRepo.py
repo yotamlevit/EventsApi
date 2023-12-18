@@ -1,27 +1,10 @@
 from datetime import datetime
 from DTO import EventDTO
 from DL import EventRepo
-from .BaseTest import BaseTest
+from .BaseTest import BaseEventsTest
 
 
-class TestEventTable(BaseTest):
-    def setup_class(self, table_name):
-        #table_columns = ["name", "start_time", "team1", "team2", "location", "participants", "creation_time"]
-        table_columns = {"name": "Text",
-                         "start_time": "TEXT",
-                         "team1": "TEXT",
-                         "team2": "TEXT",
-                         "location": "TEXT",
-                         "participants": "INTEGER",
-                         "creation_time": "TEXT"}
-
-        table_values = [["event1", "time", "team1", "team2", "location", "participants", "creation_time"],
-                        ["event2", "time", "team1", "team2", "location", "participants", "creation_time"],
-                        ["event3", "time", "team1", "team2", "location", "participants", "creation_time"],]
-
-        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values)
-
-class TestEventRepo(TestEventTable):
+class TestEventRepo(BaseEventsTest):
 
     def setup_class(self):
         test_table = "TestEventRepo"

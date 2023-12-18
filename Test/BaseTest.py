@@ -30,3 +30,20 @@ class BaseTest:
         if not self.__check_table_exist(self):
             self.sql_executor.cursor.execute(create_table_query)
             self.__insert_test_values(self)
+
+
+class BaseEventsTest(BaseTest):
+    def setup_class(self, table_name):
+        table_columns = {"name": "Text",
+                         "start_time": "TEXT",
+                         "team1": "TEXT",
+                         "team2": "TEXT",
+                         "location": "TEXT",
+                         "participants": "INTEGER",
+                         "creation_time": "TEXT"}
+
+        table_values = [["event1", "time", "team1", "team2", "location", "participants", "creation_time"],
+                        ["event2", "time", "team1", "team2", "location", "participants", "creation_time"],
+                        ["event3", "time", "team1", "team2", "location", "participants", "creation_time"],]
+
+        super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values)

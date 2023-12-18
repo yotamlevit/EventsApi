@@ -2,12 +2,12 @@
 from datetime import datetime, timedelta
 from DTO import EventDTO
 from BL import EventManager
-from .TestEventRepo import TestEventTable
+from .BaseTest import BaseEventsTest
 import pytz
 from http import HTTPStatus
 
 
-class TestEvents(TestEventTable):
+class TestEvents(BaseEventsTest):
     def setup_class(self):
         super().setup_class(self, "events")
         self.event_manager = EventManager(1)
