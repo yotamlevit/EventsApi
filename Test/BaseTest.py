@@ -1,7 +1,7 @@
 from DL.SqlExecutor import SqlExecutor
 
 
-class BaseDLTest:
+class BaseTest:
     def setup_class(self, table_name, table_columns , table_values):
         self.table_name = table_name
         self.table_columns = list(table_columns.keys())

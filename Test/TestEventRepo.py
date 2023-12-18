@@ -1,10 +1,10 @@
 from datetime import datetime
 from DTO import EventDTO
 from DL import EventRepo
-from .BaseDLTest import BaseDLTest
+from .BaseTest import BaseTest
 
 
-class TestEventTable(BaseDLTest):
+class TestEventTable(BaseTest):
     def setup_class(self, table_name):
         #table_columns = ["name", "start_time", "team1", "team2", "location", "participants", "creation_time"]
         table_columns = {"name": "Text",

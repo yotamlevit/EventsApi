@@ -1,7 +1,7 @@
-from .BaseDLTest import BaseDLTest
+from .BaseTest import BaseTest
 
 
-class TestSqlExecutor(BaseDLTest):
+class TestSqlExecutor(BaseTest):
 
     def setup_class(self):
         table_name = 'test_table'
