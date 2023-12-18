@@ -16,21 +16,18 @@ class EventRepo:
         try:
             return self.sql_executor.select(self.table)
         except sqlite3.Error as sql_err:
-            print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_id(self, event_id: int):
         try:
             return self.sql_executor.select(self.table, condition=f'id={event_id}')
         except sqlite3.Error as sql_err:
-            print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_location(self, event_location: str):
         try:
             return self.sql_executor.select(self.table, condition=f'location="{event_location}"')
         except sqlite3.Error as sql_err:
-            print(f"Error retrieving event: {sql_err}")
             raise Exception(f"Unexpected error retrieving events")
 
     def get_event_by_sort_key(self, sort_key: str):
@@ -39,7 +36,6 @@ class EventRepo:
         except sqlite3.Error as sql_error:
             if sql_error.sqlite_errorcode == 1:
                 raise ValueError(f'Invalid sort key key={sort_key}')
-            print(f"Error retrieving event: {sql_error}")
             raise Exception(f"Unexpected error retrieving events")
 
     def get_upcoming_events(self):
@@ -49,7 +45,6 @@ class EventRepo:
             upcoming_events = self.sql_executor.select(self.table, condition=time_condition, params=current_time)
             return upcoming_events
         except sqlite3.Error as sql_err:
-            print(f"Error fetching upcoming events: {str(sql_err)}")
             raise Exception(f"Unexpected error while fetching upcoming events: {sql_err}")
 
     def create_event(self, event: EventDTO):
@@ -57,10 +52,8 @@ class EventRepo:
             insertion_time = pytz.utc.localize(datetime.now())
             event_values = list(event.__dict__.values())
             event_values.append(insertion_time)
-            print(event_values)
             self.sql_executor.insert(self.table, self.fields, event_values)
         except sqlite3.Error as sql_err:
-            print(f"Error adding event: {sql_err}")
             raise Exception(f"Unexpected error while inserting new events: {sql_err}")
 
     def update_event(self, event_id: int, updated_fields: dict, ):
@@ -71,7 +64,6 @@ class EventRepo:
             self.sql_executor.update(self.table, updated_fields, condition=f'id={event_id}')
 
         except sqlite3.Error as sql_err:
-            print(f"Error updating event: {sql_err}")
             raise Exception(f"Unexpected error while updating event: {sql_err}")
         except ValueError:
             raise ValueError(f'Invalid field to update. The allowd fields are: {self.fields[:-1]}')
@@ -80,18 +72,10 @@ class EventRepo:
         try:
             self.sql_executor.delete(self.table, condition=f'id={event_id}')
         except sqlite3.Error as sql_err:
-            print(f"Error deleting event: {sql_err}")
             raise Exception(f"Unexpected error while deleting event: {sql_err}")
 
     def delete_all(self):
         try:
             self.sql_executor.delete(self.table)
         except sqlite3.Error as sql_err:
-            print(f"Error deleting event: {sql_err}")
             raise Exception(f"Unexpected error while deleting event: {sql_err}")
-
-    def close_connection(self):
-        try:
-            self.conn.close()
-        except sqlite3.Error as e:
-            print(f"Error closing connection: {e}")
