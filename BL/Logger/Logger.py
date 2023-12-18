@@ -9,7 +9,7 @@ def log(level: int, msg: str,
         payload: str = ""):
     logging.log(level, msg, extra={
         "http_code": http_code,
-        "response": json.dumps(response),
+        "response": json.dumps(response, default=str),
         "error": error.with_traceback(None) if error else None,
         "payload": payload
     })
