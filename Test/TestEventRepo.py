@@ -6,10 +6,10 @@ from .BaseDLTest import BaseDLTest
 
 class TestEventTable(BaseDLTest):
     def setup_class(self, table_name):
-        table_columns = ["name", "date", "team1", "team2", "location", "participants", "insertion_time"]
-        table_values = [["event1", "date", "team1", "team2", "location", "participants", "insertion_time"],
-                        ["event2", "date", "team1", "team2", "location", "participants", "insertion_time"],
-                        ["event3", "date", "team1", "team2", "location", "participants", "insertion_time"],]
+        table_columns = ["name", "time", "team1", "team2", "location", "participants", "creation_time"]
+        table_values = [["event1", "time", "team1", "team2", "location", "participants", "creation_time"],
+                        ["event2", "time", "team1", "team2", "location", "participants", "creation_time"],
+                        ["event3", "time", "team1", "team2", "location", "participants", "creation_time"],]
         create_table_query = f'''CREATE TABLE {table_name} (id INTEGER, name TEXT, date TEXT, team1 TEXT, team2 TEXT, location TEXT, participants INTEGER, insertion_time TEXT, PRIMARY KEY("id" AUTOINCREMENT))'''
         super().setup_class(self, table_name=table_name, table_columns=table_columns, table_values=table_values, create_table_query=create_table_query)
 

@@ -52,11 +52,11 @@ class TestEvents(TestEventTable):
 
     def test_create_event(self):
         event_location = 'test_create_location'
-        event = EventDTO(name='test_event', date=pytz.utc.localize(datetime.now() + timedelta(days=10)), team1='Team A', team2='Team B',
+        event = EventDTO(name='test_event', start_time=pytz.utc.localize(datetime.now() + timedelta(days=10)), team1='Team A', team2='Team B',
                          location=event_location, participants=100)
-        past_time_event = EventDTO(name='test_event', date=pytz.utc.localize(datetime.now()), team1='Team A', team2='Team B',
+        past_time_event = EventDTO(name='test_event', start_time=pytz.utc.localize(datetime.now()), team1='Team A', team2='Team B',
                          location=event_location, participants=100)
-        bad_time_event = EventDTO(name='test_event', date=datetime.now(), team1='Team A', team2='Team B',
+        bad_time_event = EventDTO(name='test_event', start_time=datetime.now(), team1='Team A', team2='Team B',
                                   location=event_location, participants=100)
 
         response, status_code = self.event_manager.create_event(event)

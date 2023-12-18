@@ -3,7 +3,7 @@ from datetime import datetime
 
 class EventDTO(BaseModel):
     name: str
-    date: datetime
+    start_time: datetime
     team1: str
     team2: str
     location: str

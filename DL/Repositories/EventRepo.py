@@ -10,7 +10,7 @@ class EventRepo:
         self.sql_executor = SqlExecutor()
         self.table = table
         self.fields = list(EventDTO.model_fields.keys())
-        self.fields.append("insertion_time")
+        self.fields.append("creation_time")
 
     def get_events(self):
         try:
@@ -41,6 +41,17 @@ class EventRepo:
                 raise ValueError(f'Invalid sort key key={sort_key}')
             print(f"Error retrieving event: {sql_error}")
             raise Exception(f"Unexpected error retrieving events")
+
+    #def get_upcoming_events(self):
+       # try:
+      #      time_comdition = "date > ?"
+     #       self.sql_executor.select(self.table, condition=f'')
+     #       cursor.execute(f"SELECT * FROM events WHERE start_time > ?", (current_time,))
+     #       upcoming_events = cursor.fetchall()
+     #       return upcoming_events
+    #    except sqlite3.Error as e:
+    #        print(f"Error fetching upcoming events: {str(e)}")
+    #        return []
 
     def create_event(self, event: EventDTO):
         try:
