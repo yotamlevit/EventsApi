@@ -2,8 +2,7 @@ import logging
 import json
 
 
-def log(level: int,
-        msg: str,
+def log(level: int, msg: str,
         http_code: int = 0,
         response: str = "",
         error: Exception = None,
