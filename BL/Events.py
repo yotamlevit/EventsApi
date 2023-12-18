@@ -5,6 +5,7 @@ import pytz
 from http import HTTPStatus
 from DTO import EventDTO
 from DL import EventRepo
+from .Utils import parse_event
 
 class EventManager:
     def __init__(self, user_permissions):
@@ -15,7 +16,7 @@ class EventManager:
         try:
             events = self.events_repo.get_events()
             if events:
-                events = [self.__parse_event(event) for event in events]
+                events = [parse_event(event) for event in events]
 
                 logging.info("Successfully fetched all events", response=events, http_code=HTTPStatus.OK)
                 return events, HTTPStatus.OK
@@ -33,7 +34,7 @@ class EventManager:
         try:
             event = self.events_repo.get_event_by_id(event_id)
             if event:
-                response = self.__parse_event(event[0])
+                response = parse_event(event[0])
                 logging.info(f"Successfully fetched event id={event_id}", response=response, http_code=HTTPStatus.OK)
                 return response, HTTPStatus.OK
             else:
@@ -49,7 +50,7 @@ class EventManager:
         try:
             events = self.events_repo.get_event_by_location(event_location)
             if events:
-                events = [self.__parse_event(event) for event in events]
+                events = [parse_event(event) for event in events]
                 logging.info("Successfully fetched events", response=events, http_code=HTTPStatus.OK)
                 return events, HTTPStatus.OK
             else:
@@ -65,7 +66,7 @@ class EventManager:
         try:
             events = self.events_repo.get_event_by_sort_key(sort_key)
             if events:
-                events = [self.__parse_event(event) for event in events]
+                events = [parse_event(event) for event in events]
                 logging.info(f"Successfully fetched events orders by {sort_key}", response=events, http_code=HTTPStatus.OK)
                 return events, HTTPStatus.OK
             else:
@@ -78,15 +79,14 @@ class EventManager:
             return response, HTTPStatus.BAD_REQUEST
         except Exception as err:
             response = {"message": str(err)}
-            logging.error(f"{response['message']}", response=response, http_code=HTTPStatus.INTERNAL_SERVER_ERROR, error=err)
+            logging.error(response['message'], response=response, http_code=HTTPStatus.INTERNAL_SERVER_ERROR, error=err)
             return response, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def get_upcoming_events(self):
-
         try:
             upcoming_events = self.events_repo.get_upcoming_events()
             if upcoming_events:
-                response = [self.__parse_event(event) for event in upcoming_events]
+                response = [parse_event(event) for event in upcoming_events]
 
                 logging.info("Successfully fetched upcoming events", response=response, http_code=HTTPStatus.OK)
                 return upcoming_events, HTTPStatus.OK
@@ -96,7 +96,7 @@ class EventManager:
                 return response, HTTPStatus.NOT_FOUND
         except Exception as err:
             response = {"message": str(err)}
-            logging.error(f"Error fetching upcoming events: {str(err)}", response=response, http_code=HTTPStatus.INTERNAL_SERVER_ERROR, error=err)
+            logging.error(response['message'], response=response, http_code=HTTPStatus.INTERNAL_SERVER_ERROR, error=err)
             return response, HTTPStatus.INTERNAL_SERVER_ERROR
 
     def create_event(self, event: EventDTO) -> Tuple[dict, HTTPStatus]:
@@ -159,15 +159,3 @@ class EventManager:
     def __event_exists(self, event_id: str) -> bool:
         _, status_code = self.get_event_by_id(event_id)
         return status_code == HTTPStatus.OK
-
-    @staticmethod
-    def __parse_event(event_data: list) -> dict:
-        return {
-            'id': event_data[0],
-            'name': event_data[1],
-            'start_time': event_data[2],
-            'team1': event_data[3],
-            'team2': event_data[4],
-            'location': event_data[5],
-            'creation_time': event_data[6]
-        }
