@@ -36,7 +36,7 @@ class EventRepo:
         except sqlite3.Error as sql_error:
             if sql_error.sqlite_errorcode == 1:
                 raise ValueError(f'Invalid sort key key={sort_key}')
-            raise Exception(f"Unexpected error retrieving events")
+            raise Exception(f"Unexpected error retrieving events: {sql_error} with sort key={sort_key}")
 
     def get_upcoming_events(self):
         try:
