@@ -55,10 +55,17 @@ class EventManager:
         except Exception as err:
             return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
 
+    def get_upcoming_events(self):
+        try:
+            upcoming_events = self.events_repo.get_upcoming_events()
+            return upcoming_events, HTTPStatus.OK
+        except Exception as err:
+            print(f"Error fetching upcoming events: {str(err)}")
+            return {"message": str(err)}, HTTPStatus.INTERNAL_SERVER_ERROR
+
     def create_event(self, event: EventDTO) -> Tuple[dict, HTTPStatus]:
         try:
-            insertion_time = pytz.utc.localize(datetime.now())
-            if event.date > insertion_time:
+            if event.start_time > pytz.utc.localize(datetime.now()):
                 self.events_repo.create_event(event)
                 events, _ = self.get_event_by_sort_key("id")
 
@@ -101,7 +108,7 @@ class EventManager:
         return {
             'id': event_data[0],
             'name': event_data[1],
-            'date': event_data[2],
+            'start_time': event_data[2],
             'team1': event_data[3],
             'team2': event_data[4],
             'location': event_data[5],

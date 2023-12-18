@@ -42,16 +42,15 @@ class EventRepo:
             print(f"Error retrieving event: {sql_error}")
             raise Exception(f"Unexpected error retrieving events")
 
-    #def get_upcoming_events(self):
-       # try:
-      #      time_comdition = "date > ?"
-     #       self.sql_executor.select(self.table, condition=f'')
-     #       cursor.execute(f"SELECT * FROM events WHERE start_time > ?", (current_time,))
-     #       upcoming_events = cursor.fetchall()
-     #       return upcoming_events
-    #    except sqlite3.Error as e:
-    #        print(f"Error fetching upcoming events: {str(e)}")
-    #        return []
+    def get_upcoming_events(self):
+        try:
+            time_condition = "start_time > ?"
+            current_time = pytz.utc.localize(datetime.now())
+            upcoming_events = self.sql_executor.select(self.table, condition=time_condition, params=current_time)
+            return upcoming_events
+        except sqlite3.Error as sql_err:
+            print(f"Error fetching upcoming events: {str(sql_err)}")
+            raise Exception(f"Unexpected error while fetching upcoming events: {sql_err}")
 
     def create_event(self, event: EventDTO):
         try:
