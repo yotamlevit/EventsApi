@@ -1,6 +1,6 @@
 from App import app
 from threading import Thread
-from BL.EventReminder import run_reminder_thread
+from BL.Events.EventReminder import run_reminder_thread
 import logging
 
 

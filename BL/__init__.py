@@ -1,1 +1,1 @@
-from .EventActions import EventActions
+from BL.Events.EventActions import EventActions
