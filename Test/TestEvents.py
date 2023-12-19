@@ -1,6 +1,6 @@
 
 from datetime import datetime, timedelta
-from DTO import EventDTO
+from BL.DTO import EventDTO
 from BL import EventActions
 from .BaseTest import BaseEventsTest
 import pytz

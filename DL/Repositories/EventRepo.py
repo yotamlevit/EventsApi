@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from DL.SqlExecutor import SqlExecutor
-from DTO import EventDTO
+from BL.DTO import EventDTO
 import pytz
 
 

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Tuple
 import pytz
 from http import HTTPStatus
-from DTO import EventDTO
+from BL.DTO import EventDTO
 from DL import EventRepo
 from .Utils import parse_event
 

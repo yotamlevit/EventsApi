@@ -1,5 +1,5 @@
 from datetime import datetime
-from DTO import EventDTO
+from BL.DTO import EventDTO
 from DL import EventRepo
 from .BaseTest import BaseEventsTest
 
