@@ -11,7 +11,7 @@ def run_reminder_thread():
     try:
         while True:
             send_event_reminders()
-            time.sleep(3)
+            time.sleep(60)
     except Exception as e:
         print(f"Error in reminder thread: {str(e)}")
 
@@ -23,7 +23,7 @@ def send_event_reminders():
     for event in upcoming_events:
         event = parse_event(event)
         event_time = datetime.fromisoformat(event['start_time'])
-        if event_time - current_time <= timedelta(minutes=30):
+        if event_time - current_time <= timedelta(minutes=31):
             send_notification(event)
 
 
