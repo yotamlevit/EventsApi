@@ -7,10 +7,10 @@ from DTO import EventDTO
 from DL import EventRepo
 from .Utils import parse_event
 
-class EventManager:
+class EventActions:
     def __init__(self, user_permissions):
         self.events_repo = EventRepo()
-        self.user_permissions = 1
+        self.user_permissions = 1 # TODO add precision levels for users
 
     def get_events(self) -> Tuple[list, HTTPStatus]:
         try:

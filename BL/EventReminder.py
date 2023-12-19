@@ -2,7 +2,7 @@ import sqlite3
 import time
 from datetime import datetime, timedelta
 import pytz
-from BL import EventManager
+from BL import EventActions
 from BL.Logger import Logger as logging
 from .Utils import parse_event
 
@@ -29,7 +29,7 @@ def send_event_reminders():
 
 def get_upcoming_events():
     try:
-        event_manager = EventManager(1)
+        event_manager = EventActions(1)
         events, _ = event_manager.get_upcoming_events()
         return events
     except sqlite3.Error as e:
