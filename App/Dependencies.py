@@ -1,7 +1,7 @@
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi import HTTPException, Depends, Request
 from http import HTTPStatus
-from BL import EventManager
+from BL import EventActions
 
 
 
@@ -23,6 +23,6 @@ def bl_factory(request: Request):
 
 
 BL_CLASS_MAP = {
-    'events': EventManager,
+    'events': EventActions,
     'users': None
 }

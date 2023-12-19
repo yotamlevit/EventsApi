@@ -1,7 +1,7 @@
 
 from datetime import datetime, timedelta
 from DTO import EventDTO
-from BL import EventManager
+from BL import EventActions
 from .BaseTest import BaseEventsTest
 import pytz
 from http import HTTPStatus
@@ -10,7 +10,7 @@ from http import HTTPStatus
 class TestEvents(BaseEventsTest):
     def setup_class(self):
         super().setup_class(self, "events")
-        self.event_manager = EventManager(1)
+        self.event_manager = EventActions(1)
 
     def test_get_event_by_id(self):
         id = 1
