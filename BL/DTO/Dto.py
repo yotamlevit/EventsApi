@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class EventDTO(BaseModel):
     name: str
     start_time: datetime
