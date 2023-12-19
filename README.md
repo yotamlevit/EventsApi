@@ -6,6 +6,7 @@ An event management project
 2. [How To Run](#how-to-run)
 3. [Swagger](#swagger)
 4. [Logs](#logs)
+5. [Tests](#tests)
 
 --------
 
@@ -71,3 +72,10 @@ A log is written for each event that happens in the api and in json format
 An example for a log:
 ``
 {"@timestamp": "2023-12-19 10:44:11,393", "level": "INFO", "message": "Event created", "http_code": "200", "response": "{\"message\": \"Event created\", \"event_id\": 27}", "payload": "name='string' start_time=datetime.datetime(2023, 12, 20, 8, 44, 5, 266000, tzinfo=TzInfo(UTC)) team1='string' team2='string' location='string' participants=0"}``
+
+-------
+
+## Tests
+All the tests are in the `/Test` folder
+
+To run the tests run - `pytest`
