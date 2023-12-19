@@ -53,6 +53,8 @@ The tiers are:
 To run the project run in the cli:
 ```uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-config ./conf/log_config.yml```
 
+### Rate Limit
+The API has a rate limit of 5 requests per 5 seconds 
 --------
 
 ## Swagger
