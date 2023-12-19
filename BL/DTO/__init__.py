@@ -1,1 +1,1 @@
-from .Dto import *
+from .Dto import EventDTO, UserDTO

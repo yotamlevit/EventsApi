@@ -9,3 +9,9 @@ class EventDTO(BaseModel):
     team2: str
     location: str
     participants: int
+
+
+class UserDTO(BaseModel):
+    user_name: str
+    email: str
+    password: str # In db as hash
